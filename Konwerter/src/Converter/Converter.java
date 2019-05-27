@@ -116,16 +116,26 @@ public class Converter extends JFrame{
 	
 	private void initButtons() {
 		button[0].addActionListener((a)->{
-			convert();
+			this.convert();
 		});
 		button[1].addActionListener((a)->{
-			reset();
+			this.reset();
 		});
 	}
 	
 	private void convert() {
-		int from = Integer.parseInt(text[1].getText());
-		int to = Integer.parseInt(text[2].getText());
+		int from;
+		int to;
+		try {
+			from = Integer.parseInt(text[1].getText());
+			to = Integer.parseInt(text[2].getText());
+			if(from < 2 || from > 16 || to < 2 || to > 16)
+				throw new Exception();
+		}
+		catch(Exception e) {
+			JOptionPane.showMessageDialog(this, "Błędna wartość", null, JOptionPane.PLAIN_MESSAGE);
+			return;
+		}
 		int v = 0;
 		int r = 0;
 		char val[] = text[0].getText().toCharArray();
@@ -139,10 +149,13 @@ public class Converter extends JFrame{
 			else if (val[i] >= '0' && val[i] <= '9')
 				v = val[i] - '0';
 			else {
+				JOptionPane.showMessageDialog(this, "Błędna wartość", null, JOptionPane.PLAIN_MESSAGE);
 				return;
 			}
-			if(v >= from)
+			if(v >= from){
+				JOptionPane.showMessageDialog(this, "Błędna wartość", null, JOptionPane.PLAIN_MESSAGE);
 				return;
+			}
 			
 			r = r * from + v;
 			
@@ -157,10 +170,19 @@ public class Converter extends JFrame{
 			r /= to;
 		}
 		
-		new JOptionPane().showMessageDialog(this, ret, null, JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(this, ret, null, JOptionPane.PLAIN_MESSAGE);
+		
+		this.reset();
+		
+		return;
 		
 	}
 	
+	private JOptionPane JOptionPane() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private void reset() {
 		text[0].setText("");
 		text[1].setText("");
